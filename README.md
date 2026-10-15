@@ -2,7 +2,7 @@
 
 A Things-style personal task app: a Cloudflare Worker with D1 storage, a vanilla-JS PWA front end, and a Capacitor Android shell with home-screen widgets. It can optionally sync Google Calendar and Gmail (read-only) and exposes an agent API so an AI assistant can read and write your tasks.
 
-> Shared as a reference, as-is. It was built for one household's personal use, then sanitized into this generic template. There is no support, no stability guarantee and no license file yet. Expect to adapt it.
+> Shared as a reference, as-is. It was built for one household's personal use, then sanitized into this generic template. There is no support and no stability guarantee. It is MIT licensed (see LICENSE). Expect to adapt it.
 
 ## Architecture
 
