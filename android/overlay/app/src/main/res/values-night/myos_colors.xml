@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="myos_bg">#171819</color>
+    <color name="widget_bg">#222426</color>
+    <color name="widget_fg">#F2F2F0</color>
+    <color name="widget_fg2">#A4A8AC</color>
+    <color name="widget_fg3">#6B6F73</color>
+    <color name="widget_accent">#4A93FF</color>
+</resources>

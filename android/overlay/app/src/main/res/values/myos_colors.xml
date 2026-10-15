@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Page background of the v1 web app (light); values-night has the dark one -->
+    <color name="myos_bg">#F7F7F5</color>
+    <color name="myos_icon_bg">#1F1F1F</color>
+    <color name="myos_teal">#5FD3C6</color>
+    <color name="widget_bg">#FFFFFF</color>
+    <color name="widget_fg">#292B2E</color>
+    <color name="widget_fg2">#858A90</color>
+    <color name="widget_fg3">#B0B4B9</color>
+    <color name="widget_red">#E5484D</color>
+    <color name="widget_amber">#F5A524</color>
+    <color name="widget_accent">#2D7FF9</color>
+</resources>

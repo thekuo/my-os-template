@@ -1,0 +1,22 @@
+{
+  "appId": "com.example.myos",
+  "appName": "my-os",
+  "webDir": "www",
+  "server": {
+    "url": "https://v1.my-os.example.com",
+    "cleartext": false,
+    "errorPath": "offline.html"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false,
+    "adjustMarginsForEdgeToEdge": "disable"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "myos_stat",
+      "iconColor": "#5FD3C6"
+    }
+  }
+}

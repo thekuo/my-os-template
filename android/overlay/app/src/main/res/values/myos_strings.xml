@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_title">Today</string>
+    <string name="widget_description">Today\'s to-dos and your next event</string>
+    <string name="widget_complete">Complete</string>
+    <string name="widget_add_label">Add task</string>
+    <string name="widget_add_description">Add a to-do to your Inbox</string>
+    <string name="quick_add_title">Add to Inbox</string>
+    <string name="quick_add_hint">New to-do</string>
+    <string name="quick_add_add">Add</string>
+</resources>

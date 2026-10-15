@@ -1,0 +1,138 @@
+# Builds the my-os Android shell (android/) into a signed release APK.
+# Runs on pull requests that touch android/** (every push to the PR, including base merges), on pushes to main
+# that touch it, and by hand. Builds from main also publish a GitHub release,
+# so the newest APK is always at: https://github.com/<owner>/<repo>/releases/latest/download/my-os.apk
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - '.github/workflows/android.yml'
+  pull_request:
+    paths:
+      - 'android/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * 1' # weekly: keeps the fallback signing key's cache alive (caches expire after 7 idle days)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: android
+    env:
+      VERSION_CODE: ${{ github.run_number }}
+      VERSION_NAME: 1.0.${{ github.run_number }}
+      HAS_KS_SECRET: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Signing key: repository secrets if the repo owner has set them, else a key generated here once and kept in
+      # the Actions cache (never committed, never printed). Same key every build = updates install in place.
+      - name: Restore fallback signing key
+        id: kscache
+        if: ${{ env.HAS_KS_SECRET != 'true' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.myos-signing
+          key: myos-android-fallback-keystore-v1
+
+      - name: Prepare signing key
+        env:
+          KS_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KS_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          mkdir -p ~/.myos-signing && chmod 700 ~/.myos-signing
+          if [ -n "$KS_B64" ]; then
+            echo "Using the keystore from repository secrets"
+            echo "$KS_B64" | base64 -d > ~/.myos-signing/release.jks
+            printf '%s' "$KS_PASS" > ~/.myos-signing/pass
+            printf '%s' "${KS_ALIAS:-myos}" > ~/.myos-signing/alias
+          elif [ -f ~/.myos-signing/release.jks ]; then
+            echo "Using the fallback keystore from the Actions cache"
+          else
+            echo "No signing secret and no cached key: generating the fallback keystore (first build)"
+            openssl rand -hex 24 > ~/.myos-signing/pass
+            printf 'myos' > ~/.myos-signing/alias
+            keytool -genkeypair -noprompt -keystore ~/.myos-signing/release.jks -storetype PKCS12 \
+              -alias myos -keyalg RSA -keysize 4096 -validity 36500 \
+              -storepass "$(cat ~/.myos-signing/pass)" -keypass "$(cat ~/.myos-signing/pass)" \
+              -dname "CN=my-os, O=example"
+          fi
+          echo "::add-mask::$(cat ~/.myos-signing/pass)"
+          keytool -list -keystore ~/.myos-signing/release.jks -storepass "$(cat ~/.myos-signing/pass)" | grep -i fingerprint || true
+
+      - name: Stop here on the weekly keep-alive run
+        if: github.event_name == 'schedule'
+        run: echo "Signing key cache touched; skipping the build."
+
+      - uses: actions/setup-node@v4
+        if: github.event_name != 'schedule'
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        if: github.event_name != 'schedule'
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Generate the native project
+        if: github.event_name != 'schedule'
+        run: |
+          npm install --no-audit --no-fund
+          npx cap add android
+          npx cap sync android
+          MYOS_VERSION_CODE="$VERSION_CODE" MYOS_VERSION_NAME="$VERSION_NAME" node scripts/prepare-native.mjs
+          npx cap ls android || true
+
+      - name: Gradle assembleRelease
+        if: github.event_name != 'schedule'
+        working-directory: android/android
+        run: ./gradlew --no-daemon assembleRelease
+
+      - name: Sign the APK
+        if: github.event_name != 'schedule'
+        run: |
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          IN=android/app/build/outputs/apk/release/app-release-unsigned.apk
+          mkdir -p dist
+          "$BT/zipalign" -p -f 4 "$IN" dist/aligned.apk
+          "$BT/apksigner" sign --ks ~/.myos-signing/release.jks --ks-key-alias "$(cat ~/.myos-signing/alias)" \
+            --ks-pass file:$HOME/.myos-signing/pass \
+            --out dist/my-os.apk dist/aligned.apk
+          "$BT/apksigner" verify --print-certs dist/my-os.apk | grep -i 'SHA-256' || true
+          rm dist/aligned.apk
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'schedule'
+        with:
+          name: my-os-${{ env.VERSION_NAME }}
+          path: android/dist/my-os.apk
+          if-no-files-found: error
+
+      - name: Publish release (main only)
+        if: github.event_name != 'schedule' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-v${{ env.VERSION_NAME }}
+          name: my-os Android ${{ env.VERSION_NAME }}
+          body: |
+            Signed my-os Android shell, built from ${{ github.sha }}.
+            Install: open https://github.com/${{ github.repository }}/releases/latest/download/my-os.apk on the phone.
+          files: android/dist/my-os.apk
+          make_latest: true

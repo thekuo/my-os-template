@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>my-os</title>
+<style>
+  :root { --bg:#F7F7F5; --fg:#292B2E; --fg-2:#858A90; --accent:#5FD3C6; --btn:#292B2E; --btn-fg:#FFFFFF; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#171819; --fg:#F2F2F0; --fg-2:#A4A8AC; --btn:#F2F2F0; --btn-fg:#171819; } }
+  html, body { height:100%; margin:0; }
+  body { background:var(--bg); color:var(--fg); font:17px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         display:flex; align-items:center; justify-content:center; padding:0 20px; box-sizing:border-box; text-align:center; }
+  .box { max-width:320px; }
+  svg { width:56px; height:56px; margin-bottom:20px; }
+  h1 { font-size:22px; font-weight:600; margin:0 0 8px; }
+  p { color:var(--fg-2); font-size:15px; margin:0 0 28px; }
+  button { appearance:none; border:0; border-radius:10px; background:var(--btn); color:var(--btn-fg); font:inherit; font-weight:600;
+           padding:12px 28px; min-width:160px; }
+  button:active { opacity:.7; }
+  .small { font-size:13px; margin-top:16px; margin-bottom:0; }
+</style>
+</head>
+<body>
+<div class="box">
+  <svg viewBox="0 0 108 108" aria-hidden="true"><circle cx="54" cy="54" r="40" fill="#5FD3C6"/><path d="M37 56l11 10 23-25" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h1>Can't reach my-os</h1>
+  <p>Check your connection. The app will reload by itself when you're back online.</p>
+  <button id="retry">Try again</button>
+  <p class="small" id="status"></p>
+</div>
+<script>
+  var APP = 'https://v1.my-os.example.com/';
+  var status = document.getElementById('status');
+  function retry() {
+    status.textContent = 'Connecting…';
+    // Probe first so a still-dead network doesn't bounce through another error load
+    fetch(APP + 'login', { method: 'GET', cache: 'no-store', mode: 'no-cors' })
+      .then(function () { location.replace(APP); })
+      .catch(function () { status.textContent = 'Still offline.'; });
+  }
+  document.getElementById('retry').onclick = retry;
+  addEventListener('online', retry);
+  setInterval(function () { if (navigator.onLine) retry(); }, 15000);
+</script>
+</body>
+</html>

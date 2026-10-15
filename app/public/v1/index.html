@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
+<meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171819" media="(prefers-color-scheme: dark)">
+<title>my-os</title>
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="/app.css?v=3">
+</head>
+<body>
+<div class="device" id="device">
+  <div class="app" id="app">
+    <nav class="side" id="side" aria-label="Lists"></nav>
+    <div class="main">
+      <div class="timerbar" id="timerbar" hidden>
+        <button class="tb-main" id="tb-main"><span class="tb-dot"></span><span class="tb-title" id="tb-title"></span><span class="tb-time" id="tb-time"></span></button>
+        <button class="tb-stop" id="tb-stop" aria-label="Stop timer"><svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="2" fill="currentColor"/></svg></button>
+      </div>
+      <div class="scroller" id="scroller"><div class="content" id="view"><div class="loading">Loading…</div></div></div>
+      <button class="plus" id="plus" aria-label="New to-do (drag to place)" hidden><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+      <div class="dropbar" id="dropbar" hidden aria-label="Drop onto"></div>
+      <div class="selbar" id="selbar" hidden>
+        <button id="sel-done">Done</button><span class="count" id="sel-count"></span>
+        <button id="sel-when">When</button><button id="sel-move">Move</button><button id="sel-del">Delete</button>
+      </div>
+    </div>
+    <div class="find-ov" id="find-ov" hidden><div class="find-bar"><span class="find-field"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15 15 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input id="find-input" placeholder="Quick Find" autocomplete="off" spellcheck="false"></span><button id="find-cancel">Cancel</button></div><div class="find-res" id="find-res"></div></div>
+    <div class="ghostp" id="ghostp" hidden></div><div class="ins" id="ins" hidden></div>
+    <div class="inbox-target" id="inbox-target" hidden>Drop here for Inbox</div>
+    <div class="toast" id="toast" role="status"><span id="toast-text"></span><button id="toast-undo" hidden>Undo</button></div>
+    <div class="sync-err" id="sync-err" hidden>Not saved yet. Retrying…</div>
+    <div class="scrim" id="scrim" hidden></div>
+  </div>
+</div>
+<script type="module" src="/app.js?v=3"></script>
+</body>
+</html>

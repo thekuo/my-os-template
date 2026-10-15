@@ -1,0 +1,15 @@
+{
+  "name": "my-os",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local --port 8787",
+    "deploy": "wrangler deploy",
+    "db:init:local": "wrangler d1 execute my-os --local --file=schema.sql",
+    "db:seed:local": "wrangler d1 execute my-os --local --file=test-seed.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

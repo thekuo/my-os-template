@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wi_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="34dp"
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/wi_box"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="-8dp"
+        android:layout_marginEnd="2dp"
+        android:contentDescription="@string/widget_complete"
+        android:padding="8dp"
+        android:src="@drawable/widget_box" />
+
+    <ImageView
+        android:id="@+id/wi_moon"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@null"
+        android:src="@drawable/widget_moon"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/wi_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/widget_fg"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/wi_flag"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="6dp"
+        android:contentDescription="@null"
+        android:src="@drawable/widget_flag"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/wi_meta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:singleLine="true"
+        android:textColor="@color/widget_red"
+        android:textSize="12sp"
+        android:visibility="gone" />
+</LinearLayout>

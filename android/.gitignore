@@ -1,0 +1,6 @@
+node_modules/
+# Generated in CI by `npx cap add android`; our changes live in overlay/
+/android/
+*.keystore
+*.jks
+*.apk

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-04",
+  "body_md": "## Morning routine\nKeep it simple — coffee, stretch, review today's goals.\n\n## Focus time\n- Deep work on project proposal (9am–11am)\n- Review Sam's feedback on the design\n- Budget 30 mins for lunch\n\n## This afternoon\n- Standup with team at 3pm\n- Reply to Ms. Xu's email (she's got the contract \"sorted\", just needs your sign-off)\n- Prep for Friday's review",
+  "suggestions": [
+    {
+      "title": "Review project proposal feedback",
+      "due_date": "2026-10-04",
+      "priority": "P0",
+      "list": "Tasks",
+      "recurrence": null,
+      "source": "Gmail",
+      "source_detail": "from Sam: needs review by EOD"
+    },
+    {
+      "title": "Sign reimbursement contract from Ms. Xu",
+      "due_date": "2026-10-05",
+      "priority": "P1",
+      "list": "Tasks",
+      "recurrence": null,
+      "source": "Gmail",
+      "source_detail": "from Ms. Xu: \"it's all sorted, just your sign-off needed\""
+    },
+    {
+      "title": "Prep materials for Friday review",
+      "due_date": "2026-10-06",
+      "priority": null,
+      "list": "Tasks",
+      "recurrence": null,
+      "source": "Calendar",
+      "source_detail": "Friday 2pm: team quarterly review"
+    }
+  ]
+}
